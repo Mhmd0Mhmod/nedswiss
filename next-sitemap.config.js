@@ -48,7 +48,6 @@ module.exports = {
         });
       });
     });
-
     try {
       // 2. Fetch all blogs for dynamic paths
       const response = await fetch(`${API_BASE_URL}/Blog`);
