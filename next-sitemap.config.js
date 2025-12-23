@@ -2,7 +2,7 @@ const API_BASE_URL = "https://nedsite.runasp.net/api";
 
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: "https://nedswiss-drab.vercel.app", // Updated to main domain
+  siteUrl: "https://nedswiss-drab.vercel.app",
   generateRobotsTxt: true,
   generateIndexSitemap: true,
   sitemapSize: 7000,
@@ -22,7 +22,8 @@ module.exports = {
         ],
       },
     ],
-    additionalSitemaps: ["https://nedswiss-drab.vercel.app/sitemap.xml"],
+    // Removed self-reference
+    additionalSitemaps: [],
   },
 
   additionalPaths: async (config) => {
@@ -84,12 +85,19 @@ module.exports = {
 
     return result;
   },
-  // This is key: manually handling locales in additionalPaths
-  // so we don't need next-sitemap to try and be "smart" about it
+
   transform: async (config, path) => {
-    // Return null for any paths that next-sitemap might have auto-discovered
-    // if we want full control via additionalPaths
-    // In this case, we'll keep the default transform but skip pages we manually added
+    // If it's a locale-aware path we already handled, or any other auto-discovered path, return null
+    // This ensures we ONLY use what's in additionalPaths
+    if (
+      path.startsWith("/de") ||
+      path.startsWith("/en") ||
+      path.startsWith("/fr") ||
+      path === "/"
+    ) {
+      return null;
+    }
+
     return {
       loc: path,
       changefreq: config.changefreq,
