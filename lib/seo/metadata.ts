@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata } from "next";
 
 interface SEOProps {
   title: string;
@@ -17,9 +17,9 @@ interface SEOProps {
   author?: string;
 }
 
-const defaultImageUrl = 'https://www.ned-swiss.ch/nedswiss.jpg';
-const defaultImageAlt = 'NED Swiss - Digital Excellence, Swiss Precision';
-const siteUrl = 'https://www.ned-swiss.ch';
+const defaultImageUrl = "https://www.ned-swiss.ch/nedswiss.jpg";
+const defaultImageAlt = "NED Swiss - Digital Excellence, Swiss Precision";
+const siteUrl = "https://www.ned-swiss.ch";
 
 export function generateMetadata({
   title,
@@ -35,35 +35,37 @@ export function generateMetadata({
   modifiedTime,
   articleSection,
   articleTags = [],
-  author = 'NED Swiss Team',
+  author = "NED Swiss Team",
 }: SEOProps): Metadata {
-  const fullTitle = title.includes('NED Swiss') ? title : `${title} | NED Swiss`;
+  const fullTitle = title.includes("NED Swiss")
+    ? title
+    : `${title} | NED Swiss`;
   const url = `${siteUrl}/${locale}${path}`;
-    const canonical = canonicalUrl || url;
+  const canonical = canonicalUrl || url;
 
   // Default keywords for NED Swiss
   const defaultKeywords = [
-    'NED Swiss',
-    'Swiss digital agency',
-    'web development Switzerland',
-    'graphic design Zurich',
-    'digital marketing Swiss',
-    'SEO services Switzerland',
-    'software solutions Swiss',
-    'advertising agency Zurich',
-    'Swiss precision',
-    'digital excellence',
+    "NED Swiss",
+    "Swiss digital agency",
+    "web development Switzerland",
+    "graphic design Zurich",
+    "digital marketing Swiss",
+    "SEO services Switzerland",
+    "software solutions Swiss",
+    "advertising agency Zurich",
+    "Swiss precision",
+    "digital excellence",
   ];
 
-  const allKeywords = [...defaultKeywords, ...keywords].join(', ');
+  const allKeywords = [...defaultKeywords, ...keywords].join(", ");
 
   const metadata: Metadata = {
     title: fullTitle,
     description,
     keywords: allKeywords,
     authors: [{ name: author, url: siteUrl }],
-    creator: 'NED Swiss',
-    publisher: 'NED Swiss',
+    creator: "NED Swiss",
+    publisher: "NED Swiss",
     formatDetection: {
       email: false,
       address: false,
@@ -73,18 +75,18 @@ export function generateMetadata({
     alternates: {
       canonical: canonical,
       languages: {
-        'en': `${siteUrl}/en${path}`,
-        'de': `${siteUrl}/de${path}`,
-        'fr': `${siteUrl}/fr${path}`,
+        en: `${siteUrl}/en${path}`,
+        de: `${siteUrl}/de${path}`,
+        fr: `${siteUrl}/fr${path}`,
       },
     },
     openGraph: {
       title: fullTitle,
       description,
       url: url,
-      siteName: 'NED Swiss',
+      siteName: "NED Swiss",
       locale: locale,
-      type: 'website',
+      type: "website",
       images: [
         {
           url: imageUrl,
@@ -101,11 +103,11 @@ export function generateMetadata({
       ],
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title: fullTitle,
       description,
-      site: '@nedswiss',
-      creator: '@nedswiss',
+      site: "@nedswiss",
+      creator: "@nedswiss",
       images: [
         {
           url: imageUrl,
@@ -121,26 +123,31 @@ export function generateMetadata({
         index: !noIndex,
         follow: !noIndex,
         noimageindex: false,
-        'max-video-preview': -1,
-        'max-image-preview': 'large',
-        'max-snippet': -1,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
       },
     },
     verification: {
-      google: 'your-google-site-verification-code',
-      yandex: 'your-yandex-verification-code',
-      yahoo: 'your-yahoo-verification-code',
+      google: "Y4GYP30Wj3efsbEVKjXSQpUlwK4Wt5wB6p4DTK8bYOs",
+      yandex: "your-yandex-verification-code",
+      yahoo: "your-yahoo-verification-code",
       other: {
-        'msvalidate.01': 'your-bing-verification-code',
+        "msvalidate.01": "your-bing-verification-code",
       },
     },
   };
 
   // Add article-specific metadata for blog posts
-  if (publishedTime || modifiedTime || articleSection || articleTags.length > 0) {
+  if (
+    publishedTime ||
+    modifiedTime ||
+    articleSection ||
+    articleTags.length > 0
+  ) {
     metadata.openGraph = {
       ...metadata.openGraph,
-      type: 'article',
+      type: "article",
       publishedTime,
       modifiedTime,
       section: articleSection,
@@ -155,81 +162,86 @@ export function generateMetadata({
 // Specific metadata generators for different page types
 export function generateHomeMetadata(locale: string): Metadata {
   return generateMetadata({
-    title: 'NED Swiss | Digital Excellence, Swiss Precision',
-    description: 'Leading Swiss digital agency delivering exceptional web development, design, and digital marketing services. Transform your business with Swiss precision and digital excellence.',
-    path: '',
+    title: "NED Swiss | Digital Excellence, Swiss Precision",
+    description:
+      "Leading Swiss digital agency delivering exceptional web development, design, and digital marketing services. Transform your business with Swiss precision and digital excellence.",
+    path: "",
     locale,
     keywords: [
-      'digital transformation',
-      'Swiss web agency',
-      'business growth',
-      'digital solutions',
-      'Swiss quality',
+      "digital transformation",
+      "Swiss web agency",
+      "business growth",
+      "digital solutions",
+      "Swiss quality",
     ],
   });
 }
 
 export function generateAboutMetadata(locale: string): Metadata {
   return generateMetadata({
-    title: 'About NED Swiss | Swiss Digital Excellence',
-    description: 'Discover the story behind NED Swiss, our team, values, and commitment to delivering exceptional digital solutions with Swiss precision and innovation.',
-    path: '/about',
+    title: "About NED Swiss | Swiss Digital Excellence",
+    description:
+      "Discover the story behind NED Swiss, our team, values, and commitment to delivering exceptional digital solutions with Swiss precision and innovation.",
+    path: "/about",
     locale,
     keywords: [
-      'about NED Swiss',
-      'Swiss digital team',
-      'agency story',
-      'Swiss values',
-      'digital expertise',
+      "about NED Swiss",
+      "Swiss digital team",
+      "agency story",
+      "Swiss values",
+      "digital expertise",
     ],
   });
 }
 
 export function generateServicesMetadata(locale: string): Metadata {
   return generateMetadata({
-    title: 'Digital Services | Web Development, Design & Marketing',
-    description: 'Comprehensive digital services including web development, graphic design, digital marketing, SEO, and software solutions. Swiss quality guaranteed.',
-    path: '/services',
+    title: "Digital Services | Web Development, Design & Marketing",
+    description:
+      "Comprehensive digital services including web development, graphic design, digital marketing, SEO, and software solutions. Swiss quality guaranteed.",
+    path: "/services",
     locale,
     keywords: [
-      'digital services',
-      'web development services',
-      'graphic design services',
-      'digital marketing agency',
-      'SEO services',
-      'software development',
+      "digital services",
+      "web development services",
+      "graphic design services",
+      "digital marketing agency",
+      "SEO services",
+      "software development",
     ],
   });
 }
 
 export function generateContactMetadata(locale: string): Metadata {
   return generateMetadata({
-    title: 'Contact NED Swiss | Get Your Free Consultation',
-    description: 'Ready to transform your digital presence? Contact NED Swiss today for a free consultation. We respond within 24 hours during business days.',
-    path: '/contact',
+    title: "Contact NED Swiss | Get Your Free Consultation",
+    description:
+      "Ready to transform your digital presence? Contact NED Swiss today for a free consultation. We respond within 24 hours during business days.",
+    path: "/contact",
     locale,
     keywords: [
-      'contact NED Swiss',
-      'free consultation',
-      'digital agency contact',
-      'Swiss agency contact',
-      'get quote',
+      "contact NED Swiss",
+      "free consultation",
+      "digital agency contact",
+      "Swiss agency contact",
+      "get quote",
     ],
   });
 }
 
 export function generateBlogMetadata(locale: string): Metadata {
   return generateMetadata({
-    title: 'Blog & Insights | NED Swiss Digital Trends',
-    description: 'Stay ahead with the latest digital trends, insights, and expert tips from NED Swiss. Discover innovative strategies for business growth.',
-    path: '/blogs',
+    title: "Blog & Insights | NED Swiss Digital Trends",
+    description:
+      "Stay ahead with the latest digital trends, insights, and expert tips from NED Swiss. Discover innovative strategies for business growth.",
+    path: "/blogs",
     locale,
     keywords: [
-      'digital marketing blog',
-      'web development insights',
-      'Swiss digital trends',
-      'business growth tips',
-      'technology insights',
+      "digital marketing blog",
+      "web development insights",
+      "Swiss digital trends",
+      "business growth tips",
+      "technology insights",
     ],
   });
 }
@@ -261,13 +273,13 @@ export function generateBlogPostMetadata({
     imageUrl,
     publishedTime,
     modifiedTime,
-    articleSection: 'Digital Marketing',
+    articleSection: "Digital Marketing",
     articleTags: tags,
     keywords: [
       ...tags,
-      'digital insights',
-      'business tips',
-      'technology trends',
+      "digital insights",
+      "business tips",
+      "technology trends",
     ],
   });
 }
@@ -292,8 +304,8 @@ export function generateServicePageMetadata({
       serviceName.toLowerCase(),
       `${serviceName.toLowerCase()} Switzerland`,
       `Swiss ${serviceName.toLowerCase()}`,
-      'professional services',
-      'Swiss quality',
+      "professional services",
+      "Swiss quality",
     ],
   });
-} 
+}

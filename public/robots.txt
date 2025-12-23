@@ -1,12 +1,9 @@
 # *
 User-agent: *
 Allow: /
-Disallow: /api/*
-Disallow: /_next/*
-Disallow: /_vercel/*
-Disallow: /static/*
-Disallow: /*.json
-Disallow: /favicon.ico
+Disallow: /api/
+Disallow: /_next/
+Disallow: /_vercel/
 
 # Host
 Host: https://nedswiss-drab.vercel.app

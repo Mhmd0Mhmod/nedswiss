@@ -6,62 +6,56 @@ module.exports = {
   generateRobotsTxt: true,
   generateIndexSitemap: true,
 
-  // Robots.txt optimization
   robotsTxtOptions: {
     policies: [
       {
         userAgent: "*",
         allow: "/",
-        disallow: [
-          "/api/*",
-          "/_next/*",
-          "/_vercel/*",
-          "/static/*",
-          "/*.json",
-          "/favicon.ico",
-        ],
+        disallow: ["/api/", "/_next/", "/_vercel/"],
       },
     ],
-    additionalSitemaps: [],
   },
 
   additionalPaths: async (config) => {
     const result = [];
     const locales = ["de", "en", "fr"];
-    const staticRoutes = ["", "/about", "/services", "/blogs", "/contact"];
+    const routes = ["", "/about", "/services", "/blogs", "/contact"];
 
-    // Helper to generate alternateRefs for a path
-    const getAlternateRefs = (path) =>
-      locales.map((locale) => ({
-        href: `${config.siteUrl}/${locale}${path}`,
-        hreflang: locale,
-      }));
+    // Helper to generate absolute alternateRefs
+    const getAlternateRefs = (route) => [
+      { hreflang: "de", href: `${config.siteUrl}/de${route}` },
+      { hreflang: "en", href: `${config.siteUrl}/en${route}` },
+      { hreflang: "fr", href: `${config.siteUrl}/fr${route}` },
+    ];
 
-    // 1. Add static routes for all locales with full hreflang support
+    // 1. Static Routes
     locales.forEach((locale) => {
-      staticRoutes.forEach((route) => {
+      routes.forEach((route) => {
+        const path = `/${locale}${route}`;
         result.push({
-          loc: `/${locale}${route}`,
-          changefreq: route === "" ? "daily" : "weekly",
+          loc: `${config.siteUrl}${path}`,
+          changefreq: "weekly",
           priority: route === "" ? 1.0 : 0.8,
-          lastmod: new Date().toISOString(),
           alternateRefs: getAlternateRefs(route),
         });
       });
     });
+
     try {
-      // 2. Fetch all blogs for dynamic paths
+      // 2. Dynamic Blog Routes
       const response = await fetch(`${API_BASE_URL}/Blog`);
       if (response.ok) {
         const blogs = await response.json();
+        const blogLocales = ["de", "en", "fr"];
 
         blogs.forEach((blog) => {
           if (blog.slug && blog.status === 1) {
-            locales.forEach((locale) => {
+            blogLocales.forEach((locale) => {
               const blogPath = `/blogs/${blog.slug}`;
+              const path = `/${locale}${blogPath}`;
               result.push({
-                loc: `/${locale}${blogPath}`,
-                changefreq: "daily", // Blogs are more dynamic
+                loc: `${config.siteUrl}${path}`,
+                changefreq: "daily",
                 priority: 0.7,
                 lastmod: blog.updatedAt || new Date().toISOString(),
                 alternateRefs: getAlternateRefs(blogPath),
@@ -71,25 +65,16 @@ module.exports = {
         });
       }
     } catch (error) {
-      console.error("Error fetching blogs for sitemap:", error);
+      console.error("Error fetching blogs:", error);
     }
 
     return result;
   },
 
   transform: async (config, path) => {
-    // Exclude the default paths that next-sitemap might find automatically
-    // (like [locale] segments) to avoid duplicates since we manualy
-    // handle all localized routes in additionalPaths for 100% control.
-    if (path.includes("[locale]")) return null;
-
-    // Default transform for any other paths found
-    return {
-      loc: path,
-      changefreq: config.changefreq,
-      priority: config.priority,
-      lastmod: config.autoLastmod ? new Date().toISOString() : undefined,
-      alternateRefs: config.alternateRefs ?? [],
-    };
+    // Return null for any paths found by the default crawler
+    // since we manually handle everything in additionalPaths for 100% control
+    // and to avoid the doubling bug caused by automatic i18n logic.
+    return null;
   },
 };
