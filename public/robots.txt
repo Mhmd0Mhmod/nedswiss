@@ -1,33 +1,14 @@
-# Robots.txt for NED Swiss
-# https://www.ned-swiss.ch/
-
-# Allow all crawlers to access all content
+# *
 User-agent: *
 Allow: /
+Disallow: /api/*
+Disallow: /_next/*
+Disallow: /static/*
+Disallow: /*.json
+Disallow: /favicon.ico
 
-# Sitemap location
+# Host
+Host: https://www.ned-swiss.ch
+
+# Sitemaps
 Sitemap: https://www.ned-swiss.ch/sitemap.xml
-
-# Specific crawl delays for different bots (optional)
-User-agent: Googlebot
-Allow: /
-Crawl-delay: 1
-
-User-agent: Bingbot
-Allow: /
-Crawl-delay: 1
-
-# Block specific paths if needed (examples - uncomment if necessary)
-# Disallow: /admin/
-# Disallow: /api/
-# Disallow: /cache/
-# Disallow: /_next/
-# Disallow: /private/
-
-# Allow specific files that are important for SEO
-Allow: /favicon.ico
-Allow: /sitemap.xml
-Allow: /.well-known/
-
-# Host directive (helps with www vs non-www preference)
-Host: https://nedswiss.com 
