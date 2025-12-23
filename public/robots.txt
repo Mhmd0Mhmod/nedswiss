@@ -1,0 +1,14 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /api/*
+Disallow: /_next/*
+Disallow: /static/*
+Disallow: /*.json
+Disallow: /favicon.ico
+
+# Host
+Host: https://nedswiss-drab.vercel.app
+
+# Sitemaps
+Sitemap: https://nedswiss-drab.vercel.app/sitemap.xml

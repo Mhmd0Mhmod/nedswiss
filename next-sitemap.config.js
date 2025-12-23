@@ -2,11 +2,12 @@ const API_BASE_URL = "https://nedsite.runasp.net/api";
 
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: "https://www.ned-swiss.ch",
+  siteUrl: "https://nedswiss-drab.vercel.app", // Updated to main domain
   generateRobotsTxt: true,
   generateIndexSitemap: true,
+  sitemapSize: 7000,
+  exclude: ["/api/*", "/_next/*", "/static/*"],
 
-  // Robots.txt optimization
   robotsTxtOptions: {
     policies: [
       {
@@ -21,7 +22,7 @@ module.exports = {
         ],
       },
     ],
-    additionalSitemaps: ["https://www.ned-swiss.ch/sitemap.xml"],
+    additionalSitemaps: ["https://nedswiss-drab.vercel.app/sitemap.xml"],
   },
 
   additionalPaths: async (config) => {
@@ -29,18 +30,19 @@ module.exports = {
     const locales = ["de", "en", "fr"];
     const staticRoutes = ["", "/about", "/services", "/blogs", "/contact"];
 
-    // Helper to generate alternateRefs for a path
+    // Helper to generate alternateRefs for a path (path should NOT include locale)
     const getAlternateRefs = (path) =>
       locales.map((locale) => ({
         href: `${config.siteUrl}/${locale}${path}`,
         hreflang: locale,
       }));
 
-    // 1. Add static routes for all locales with full hreflang support
+    // 1. Add static routes for all locales
     locales.forEach((locale) => {
       staticRoutes.forEach((route) => {
+        const fullPath = `/${locale}${route}`;
         result.push({
-          loc: `/${locale}${route}`,
+          loc: fullPath,
           changefreq: route === "" ? "daily" : "weekly",
           priority: route === "" ? 1.0 : 0.8,
           lastmod: new Date().toISOString(),
@@ -56,15 +58,21 @@ module.exports = {
         const blogs = await response.json();
 
         blogs.forEach((blog) => {
-          if (blog.slug && blog.status === 1) {
+          const slug = blog.slug || blog.Slug;
+          const status = blog.status !== undefined ? blog.status : blog.Status;
+          const updatedAt =
+            blog.updatedAt || blog.UpdatedAt || new Date().toISOString();
+
+          if (slug && status === 1) {
+            const blogPathOnly = `/blogs/${slug}`;
             locales.forEach((locale) => {
-              const blogPath = `/blogs/${blog.slug}`;
+              const fullBlogPath = `/${locale}${blogPathOnly}`;
               result.push({
-                loc: `/${locale}${blogPath}`,
-                changefreq: "daily", // Blogs are more dynamic
+                loc: fullBlogPath,
+                changefreq: "daily",
                 priority: 0.7,
-                lastmod: blog.updatedAt || new Date().toISOString(),
-                alternateRefs: getAlternateRefs(blogPath),
+                lastmod: updatedAt,
+                alternateRefs: getAlternateRefs(blogPathOnly),
               });
             });
           }
@@ -76,14 +84,12 @@ module.exports = {
 
     return result;
   },
-
+  // This is key: manually handling locales in additionalPaths
+  // so we don't need next-sitemap to try and be "smart" about it
   transform: async (config, path) => {
-    // Exclude the default paths that next-sitemap might find automatically
-    // (like [locale] segments) to avoid duplicates since we manualy
-    // handle all localized routes in additionalPaths for 100% control.
-    if (path.includes("[locale]")) return null;
-
-    // Default transform for any other paths found
+    // Return null for any paths that next-sitemap might have auto-discovered
+    // if we want full control via additionalPaths
+    // In this case, we'll keep the default transform but skip pages we manually added
     return {
       loc: path,
       changefreq: config.changefreq,
