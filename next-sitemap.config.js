@@ -2,7 +2,7 @@ const API_BASE_URL = "https://nedsite.runasp.net/api";
 
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: "https://www.ned-swiss.ch",
+  siteUrl: "https://nedswiss-drab.vercel.app",
   generateRobotsTxt: true,
   generateIndexSitemap: true,
 
@@ -15,13 +15,14 @@ module.exports = {
         disallow: [
           "/api/*",
           "/_next/*",
+          "/_vercel/*",
           "/static/*",
           "/*.json",
           "/favicon.ico",
         ],
       },
     ],
-    additionalSitemaps: ["https://www.ned-swiss.ch/sitemap.xml"],
+    additionalSitemaps: [],
   },
 
   additionalPaths: async (config) => {
