@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/api/", "/_next/", "/static/", "/*.json", "/favicon.ico"],
     },
-    sitemap: "https://nedswiss-drab.vercel.app/sitemap.xml",
+    sitemap: "https://www.ned-swiss.ch/sitemap.xml",
   };
 }

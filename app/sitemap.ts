@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 
 const API_BASE_URL = "https://nedsite.runasp.net/api";
-const SITE_URL = "https://nedswiss-drab.vercel.app";
+const SITE_URL = "https://www.ned-swiss.ch";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const locales = ["de", "en", "fr"];
