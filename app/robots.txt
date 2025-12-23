@@ -1,0 +1,31 @@
+# Robots.txt for NED Swiss
+# https://nedswiss-drab.vercel.app/
+
+# Allow all crawlers to access all content
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://nedswiss-drab.vercel.app/sitemap.xml
+
+# Specific crawl delays for different bots (optional)
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Block specific paths if needed (examples - uncomment if necessary)
+# Disallow: /admin/
+# Disallow: /api/
+# Disallow: /cache/
+# Disallow: /_next/
+# Disallow: /private/
+
+# Allow specific files that are important for SEO
+Allow: /favicon.ico
+Allow: /sitemap.xml
+Allow: /.well-known/
+
+# Host directive (helps with www vs non-www preference)
+Host: https://nedswiss-drab.vercel.app 
